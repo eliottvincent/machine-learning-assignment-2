@@ -19,7 +19,22 @@ featuresNames = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrolo
 
 def main():
 	df = load_dataframe('DataSet-cleaned-integer.csv')
-	print(df)
+
+	convertedDf = dataframeToNumpy(df)
+	# TODO: split the df to get a training set and a test set
+	# scikit can do this easily with http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
+
+	et = ExtraTreesClassifier(n_estimators=100, max_depth=None, random_state=0)
+
+	columns = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrology', 'Vertical_Distance_To_Hydrology', 'Horizontal_Distance_To_Roadways', 'Hillshade_9am', 'Hillshade_Noon', 'Hillshade_3pm', 'Horizontal_Distance_To_Fire_Points']
+	columnsBis = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrology']
+
+	labels = df['Cover_Type'].values
+	features = df[list(columnsBis)].values	# getting all features
+	
+	et_score = cross_val_score(et, features, labels, n_jobs=-1).mean()
+
+	print("{0} -> ET: {1})".format(columns, et_score))
 	return None
 
 
