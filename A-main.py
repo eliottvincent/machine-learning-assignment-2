@@ -14,8 +14,12 @@ from sklearn.cross_validation import cross_val_score
 #================================================================================
 # properties
 #================================================================================
+dataPath = './data/'
+featuresNames = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrology', 'Vertical_Distance_To_Hydrology', 'Horizontal_Distance_To_Roadways', 'Hillshade_9am', 'Hillshade_Noon', 'Hillshade_3pm', 'Horizontal_Distance_To_Fire_Points', 'Wilderness_Area', 'Soil_Type', 'Cover_Type']
 
 def main():
+	df = load_dataframe('DataSet-cleaned-integer.csv')
+	print(df)
 	return None
 
 
