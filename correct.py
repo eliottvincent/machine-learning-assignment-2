@@ -77,19 +77,36 @@ no_values = 0
 def treatment():
 	print('Treatment started')
 	reader = loadCSV()
+	writer = writeCSV()
+	
 	
 	for row in reader:
+
+		# Computing the values
 		Wilderness_Area_value = Wilderness_Area_treatment(row)
 		Soil_Type_value = Soil_Type_treatment(row)
 		Cover_Type_value = Cover_Type_treatment(row)
 		print(str(Wilderness_Area_value) + ', ' + str(Soil_Type_value) + ', ' + str(Cover_Type_value))
 
+		# deleting rows
+		del row[10:55]
+		row.append(Wilderness_Area_value)
+		row.append(Soil_Type_value)
+		row.append(Cover_Type_value)
+		writer.writerow(row)
+
+
+
 	print('Treatment ended with ' + str(no_values) + ' errors')
 
 
 def loadCSV():
-	file = open('./data/DataSet.csv')
+	file = open('./data/DataSet.csv', 'r')
 	return csv.reader(file, delimiter=',')
+
+def writeCSV():
+	file = open('./data/DataSet-cleaned.csv', 'w')
+	return csv.writer(file, delimiter=',')
 
 def Wilderness_Area_treatment(row):
 	global no_values
