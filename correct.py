@@ -95,8 +95,6 @@ def treatment():
 		row.append(Cover_Type_value)
 		writer.writerow(row)
 
-
-
 	print('Treatment ended with ' + str(no_values) + ' errors')
 
 
