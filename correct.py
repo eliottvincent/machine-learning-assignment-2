@@ -120,7 +120,7 @@ def Wilderness_Area_treatment(row):
 	# print('    Wilderness_Area is: ' + str(Wilderness_Area_value))
 	if Wilderness_Area_value == 0:
 		no_values += 1
-	return Wilderness_Area_value
+	return Wilderness_Area[Wilderness_Area_value]
 	# print('Wilderness_Area_treatment ended')
 	# Wilderness_Area_treatment_end
 
@@ -138,7 +138,7 @@ def Soil_Type_treatment(row):
 	# print('    Soil_Type is: ' + str(Soil_Type_value))
 	if Soil_Type_value == 0:
 		no_values += 1
-	return Soil_Type_value
+	return Soil_Type[Soil_Type_value]
 	# print('Soil_Type_treatment ended')
 	# Soil_Type_treatment_end
 
@@ -153,7 +153,7 @@ def Cover_Type_treatment(row):
 	# print('    Cover_Type is: ' + str(Cover_Type_value))
 	if Cover_Type_value == 0:
 		no_values += 1
-	return Cover_Type_value
+	return Cover_Type[Cover_Type_value]
 	# print('Cover_Type_treatment ended')
 	# Cover_Type_treatment_end
 	
