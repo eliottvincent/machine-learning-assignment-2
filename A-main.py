@@ -15,10 +15,11 @@ from sklearn.cross_validation import cross_val_score
 # properties
 #================================================================================
 
-
-
 def main():
-	
+	return None
+
+def dataframeToNumpy(df):
+	return df[df.columns.values].values
 
 # program launch
 if __name__ == '__main__':
