@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.datasets import make_classification
 from sklearn import metrics
+from sklearn import tree
 
 
 #================================================================================
@@ -29,7 +30,8 @@ def main():
 
 	# convertedDf = dataframeToNumpy(df)
 
-	RunRandomForestClassifier(trainDf, testDf)
+	# RunRandomForestClassifier(trainDf, testDf)
+	RunDecisionTree(trainDf, testDf)
 	# RunMLPClassifier(trainDf, testDf)
 	# RunExtraTreesClassifier(trainDf, testDf)
 
@@ -73,6 +75,32 @@ def RunRandomForestClassifier(train, test):
 
 	# Write to CSV
 	pd.DataFrame({'Cover_Type': y_test_rf}).sort_index(ascending=False, axis=1).to_csv('rf1.csv', index=False)
+
+
+def RunDecisionTree(train, test):
+	# Create numpy arrays for use with scikit-learn
+	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
+	train_y = train.Cover_Type.values						# target feature (to predict)
+	test_X = test.drop(['Cover_Type'], axis=1).values
+
+	# Split the training set into training and validation sets
+	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
+
+	dt = tree.DecisionTreeClassifier()
+	dt.fit(X, y)			# Train
+	y_rf = dt.predict(X_)	# Predict / y_rf represents the estimated targets as returned by our classifier
+	
+	# Evaluating model with validation set
+	print(metrics.classification_report(y_, y_rf))
+	print(metrics.confusion_matrix(y_, y_rf))
+	print(metrics.accuracy_score(y_, y_rf))
+	print(metrics.r2_score(y_, y_rf))
+
+	dt.fit(train_X, train_y)		# Retrain with entire training set
+	y_test_rf = dt.predict(test_X)	# Predict with test set
+
+	# Write to CSV
+	pd.DataFrame({'Cover_Type': y_test_rf}).sort_index(ascending=False, axis=1).to_csv('dt1.csv', index=False)
 
 
 def RunExtraTreesClassifier():
