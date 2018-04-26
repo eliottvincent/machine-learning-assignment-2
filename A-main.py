@@ -110,7 +110,7 @@ def RunRandomForestClassifier(train, test):
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
 
-	rfc = RandomForestClassifier(n_estimators=10, max_depth=None, verbose=True)
+	rfc = RandomForestClassifier(n_estimators=10, criterion='entropy', max_features=None, max_depth=None, verbose=True)
 	rfc.fit(X, y)			# Train
 	y_rfc = rfc.predict(X_)	# Predict / y_rfc represents the estimated targets as returned by our classifier 
 
