@@ -155,7 +155,7 @@ def RunExtraTreesClassifier(train, test):
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
 
-	etc = ExtraTreesClassifier(n_estimators=100, max_depth=None, random_state=0, verbose=True)
+	etc = ExtraTreesClassifier(n_estimators=10, max_depth=None, random_state=0, verbose=True)
 	etc.fit(X, y)			# Train
 	y_etc = etc.predict(X_)	# Predict / y_etc represents the estimated targets as returned by our classifier
 	
