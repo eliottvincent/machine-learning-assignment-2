@@ -7,21 +7,33 @@ __version__ = "0.1"
 #================================================================================
 import pandas as pd
 import numpy as np
+
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.ensemble import BaggingClassifier
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.ensemble import VotingClassifier
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.linear_model import LogisticRegression
 
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.datasets import make_classification
+from sklearn import datasets
+
 from sklearn import metrics
 from sklearn.dummy import DummyClassifier
 from sklearn import tree
+
+
+from sklearn.model_selection import cross_val_score
+
+
 
 
 #================================================================================
@@ -41,9 +53,9 @@ def main():
 	# RunExtraTreesClassifier(trainDf, testDf)
 	# RunAdaBoostClassifier(trainDf, testDf)
 	# RunBaggingClassifier(trainDf, testDf)
-	RunGradientBoostingClassifier(trainDf, testDf)
-
-
+	# RunGradientBoostingClassifier(trainDf, testDf)
+	# RunVotingClassifier(trainDf, testDf)
+	RunKNeighborsClassifier(trainDf, testDf)
 
 	# RunMLPClassifier(trainDf, testDf)
 	
@@ -225,6 +237,31 @@ def RunBaggingClassifier(train, test):
 	# Write to CSV
 	pd.DataFrame({'Cover_Type': y_test_bc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/bc1.csv', index=False)
 
+
+def RunGradientBoostingClassifier(train, test):
+	# Create numpy arrays for use with scikit-learn
+	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
+	train_y = train.Cover_Type.values						# target feature (to predict)
+	test_X = test.drop(['Cover_Type'], axis=1).values
+
+	# Split the training set into training and validation sets
+	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
+
+	gbc = GradientBoostingClassifier(n_estimators=10, learning_rate=1.0, max_depth=1, random_state=0)
+	gbc.fit(X, y)			# Train
+	y_gbc = gbc.predict(X_)	# Predict / y_gbc represents the estimated targets as returned by our classifier
+	
+	# Evaluating model with validation set
+	print(metrics.classification_report(y_, y_gbc))
+	print(metrics.confusion_matrix(y_, y_gbc))
+	print(metrics.accuracy_score(y_, y_gbc))
+	print(metrics.r2_score(y_, y_gbc))
+
+	gbc.fit(train_X, train_y)			# Retrain with entire training set
+	y_test_bc = gbc.predict(test_X)	# Predict with test set
+
+	# Write to CSV
+	pd.DataFrame({'Cover_Type': y_test_bc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/bc1.csv', index=False)
 #  ██╗███╗   ██╗██████╗ ██╗   ██╗████████╗    ██████╗ ██╗   ██╗████████╗██████╗ ██╗   ██╗████████╗
 #  ██║████╗  ██║██╔══██╗██║   ██║╚══██╔══╝   ██╔═══██╗██║   ██║╚══██╔══╝██╔══██╗██║   ██║╚══██╔══╝
 #  ██║██╔██╗ ██║██████╔╝██║   ██║   ██║█████╗██║   ██║██║   ██║   ██║   ██████╔╝██║   ██║   ██║   
