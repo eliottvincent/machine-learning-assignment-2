@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
@@ -32,7 +33,8 @@ def main():
 	# RunDummyClassifier(trainDf, testDf)
 	# RunRandomForestClassifier(trainDf, testDf)
 	# RunDecisionTreeClassifier(trainDf, testDf)
-	RunExtraTreesClassifier(trainDf, testDf)
+	# RunExtraTreesClassifier(trainDf, testDf)
+	RunAdaBoostClassifier(trainDf, testDf)
 
 
 	# RunMLPClassifier(trainDf, testDf)
@@ -162,6 +164,31 @@ def RunExtraTreesClassifier(train, test):
 	pd.DataFrame({'Cover_Type': y_test_etc}).sort_index(ascending=False, axis=1).to_csv('etc1.csv', index=False)
 
 
+def RunAdaBoostClassifier(train, test):
+
+	# Create numpy arrays for use with scikit-learn
+	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
+	train_y = train.Cover_Type.values						# target feature (to predict)
+	test_X = test.drop(['Cover_Type'], axis=1).values
+
+	# Split the training set into training and validation sets
+	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
+
+	abc = AdaBoostClassifier(n_estimators=10)
+	abc.fit(X, y)			# Train
+	y_abc = abc.predict(X_)	# Predict / y_abc represents the estimated targets as returned by our classifier
+	
+	# Evaluating model with validation set
+	print(metrics.classification_report(y_, y_abc))
+	print(metrics.confusion_matrix(y_, y_abc))
+	print(metrics.accuracy_score(y_, y_abc))
+	print(metrics.r2_score(y_, y_abc))
+
+	abc.fit(train_X, train_y)			# Retrain with entire training set
+	y_test_abc = abc.predict(test_X)	# Predict with test set
+
+	# Write to CSV
+	pd.DataFrame({'Cover_Type': y_test_abc}).sort_index(ascending=False, axis=1).to_csv('abc1.csv', index=False)
 
 
 
