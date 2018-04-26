@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.datasets import make_classification
 from sklearn import metrics
+from sklearn.dummy import DummyClassifier
 from sklearn import tree
 
 
@@ -28,13 +29,13 @@ def main():
 	fullDf = load_dataframe('DataSet-cleaned-binary.csv')
 	trainDf, testDf = splitDataFrame(fullDf, 90)
 
-	# convertedDf = dataframeToNumpy(df)
-
+	RunDummyClassifier(trainDf, testDf)
 	# RunRandomForestClassifier(trainDf, testDf)
-	RunDecisionTree(trainDf, testDf)
-	# RunMLPClassifier(trainDf, testDf)
 	# RunExtraTreesClassifier(trainDf, testDf)
 
+	RunRandomForestClassifier(trainDf, testDf)
+	# RunMLPClassifier(trainDf, testDf)
+	
 	return None
 
 
@@ -46,6 +47,36 @@ def main():
 #  ██║     ██║     ██╔══██║╚════██║╚════██║██║██╔══╝  ██║██╔══╝  ██╔══██╗╚════██║
 #  ╚██████╗███████╗██║  ██║███████║███████║██║██║     ██║███████╗██║  ██║███████║
 #   ╚═════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝
+
+
+
+def RunDummyClassifier(train, test):
+	
+	# Create numpy arrays for use with scikit-learn
+	# train_X = train.drop(['Id','Cover_Type'],axis=1).values
+	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
+	train_y = train.Cover_Type.values						# target feature (to predict)
+	# test_X = test.drop('Id',axis=1).values
+	test_X = test.drop(['Cover_Type'], axis=1).values
+
+	# Split the training set into training and validation sets
+	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
+
+	dc = DummyClassifier(strategy='most_frequent', random_state=0)
+	dc.fit(X, y)			# Train
+	y_dc = dc.predict(X_)	# Predict / y_dc represents the estimated targets as returned by our classifier 
+
+	# Evaluating model with validation set
+	print(metrics.classification_report(y_, y_dc))
+	print(metrics.confusion_matrix(y_, y_dc))
+	print(metrics.accuracy_score(y_, y_dc))
+	print(metrics.r2_score(y_, y_dc))
+
+	dc.fit(train_X, train_y)		# Retrain with entire training set
+	y_test_dc = dc.predict(test_X)	# Predict with test set
+
+	# Write to CSV
+	pd.DataFrame({'Cover_Type': y_test_dc}).sort_index(ascending=False, axis=1).to_csv('dc1.csv', index=False)
 
 
 def RunRandomForestClassifier(train, test):
@@ -60,21 +91,21 @@ def RunRandomForestClassifier(train, test):
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
 
-	rf = RandomForestClassifier(n_estimators=100, max_depth=None, verbose=True)
-	rf.fit(X, y)			# Train
-	y_rf = rf.predict(X_)	# Predict / y_rf represents the estimated targets as returned by our classifier 
+	rfc = RandomForestClassifier(n_estimators=10, max_depth=None, verbose=True)
+	rfc.fit(X, y)			# Train
+	y_rfc = rfc.predict(X_)	# Predict / y_rfc represents the estimated targets as returned by our classifier 
 
 	# Evaluating model with validation set
-	print(metrics.classification_report(y_, y_rf))
-	print(metrics.confusion_matrix(y_, y_rf))
-	print(metrics.accuracy_score(y_, y_rf))
-	print(metrics.r2_score(y_, y_rf))
+	print(metrics.classification_report(y_, y_rfc))
+	print(metrics.confusion_matrix(y_, y_rfc))
+	print(metrics.accuracy_score(y_, y_rfc))
+	print(metrics.r2_score(y_, y_rfc))
 
-	rf.fit(train_X, train_y)		# Retrain with entire training set
-	y_test_rf = rf.predict(test_X)	# Predict with test set
+	rfc.fit(train_X, train_y)			# Retrain with entire training set
+	y_test_rfc = rfc.predict(test_X)	# Predict with test set
 
 	# Write to CSV
-	pd.DataFrame({'Cover_Type': y_test_rf}).sort_index(ascending=False, axis=1).to_csv('rf1.csv', index=False)
+	pd.DataFrame({'Cover_Type': y_test_rfc}).sort_index(ascending=False, axis=1).to_csv('rf1.csv', index=False)
 
 
 def RunDecisionTree(train, test):
