@@ -135,18 +135,32 @@ def RunDecisionTreeClassifier(train, test):
 	pd.DataFrame({'Cover_Type': y_test_dtc}).sort_index(ascending=False, axis=1).to_csv('dtc1.csv', index=False)
 
 
-def RunExtraTreesClassifier():
-	et = ExtraTreesClassifier(n_estimators=100, max_depth=None, random_state=0)
+def RunExtraTreesClassifier(train, test):
 
-	columns = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrology', 'Vertical_Distance_To_Hydrology', 'Horizontal_Distance_To_Roadways', 'Hillshade_9am', 'Hillshade_Noon', 'Hillshade_3pm', 'Horizontal_Distance_To_Fire_Points']
-	columnsBis = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrology']
+	# Create numpy arrays for use with scikit-learn
+	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
+	train_y = train.Cover_Type.values						# target feature (to predict)
+	test_X = test.drop(['Cover_Type'], axis=1).values
 
-	labels = df['Cover_Type'].values
-	features = df[list(columnsBis)].values	# getting all features
+	# Split the training set into training and validation sets
+	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
+
+	etc = ExtraTreesClassifier(n_estimators=100, max_depth=None, random_state=0, verbose=True)
+	etc.fit(X, y)			# Train
+	y_etc = etc.predict(X_)	# Predict / y_etc represents the estimated targets as returned by our classifier
 	
-	et_score = cross_val_score(et, features, labels, n_jobs=-1).mean()
+	# Evaluating model with validation set
+	print(metrics.classification_report(y_, y_etc))
+	print(metrics.confusion_matrix(y_, y_etc))
+	print(metrics.accuracy_score(y_, y_etc))
+	print(metrics.r2_score(y_, y_etc))
 
-	print("{0} -> ET: {1})".format(columns, et_score))
+	etc.fit(train_X, train_y)		# Retrain with entire training set
+	y_test_etc = etc.predict(test_X)	# Predict with test set
+
+	# Write to CSV
+	pd.DataFrame({'Cover_Type': y_test_etc}).sort_index(ascending=False, axis=1).to_csv('etc1.csv', index=False)
+
 
 
 
