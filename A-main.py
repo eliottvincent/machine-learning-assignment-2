@@ -323,8 +323,6 @@ def evaluateModel(y_true, y_pred):
 	print('')
 	print('Accuracy score: ' + str(metrics.accuracy_score(y_true, y_pred)))
 	print('')
-	# print('Precision score: ' + str(metrics.precision_score(y_true, y_pred, average=None)))
-	# print('Recall: ' + str(metrics.recall_score(y_true, y_pred, average=None)))
 	return None
 
 
