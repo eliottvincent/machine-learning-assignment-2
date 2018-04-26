@@ -262,6 +262,21 @@ def RunGradientBoostingClassifier(train, test):
 
 	# Write to CSV
 	pd.DataFrame({'Cover_Type': y_test_bc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/bc1.csv', index=False)
+
+
+def RunVotingClassifier(train, test):
+	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
+	train_y = train.Cover_Type.values						# target feature (to predict)
+	test_X = test.drop(['Cover_Type'], axis=1).values
+
+	clf1 = LogisticRegression(random_state=1)
+	clf2 = RandomForestClassifier(random_state=1)
+	clf3 = GaussianNB()
+
+	eclf = VotingClassifier(estimators=[('lr', clf1), ('rf', clf2), ('gnb', clf3)], voting='hard')
+
+	for clf, label in zip([clf1, clf2, clf3, eclf], ['Logistic Regression', 'Random Forest', 'naive Bayes', 'Ensemble']):scores = cross_val_score(clf, train_X, train_y, cv=5, scoring='accuracy')
+	print("Accuracy: %0.2f (+/- %0.2f) [%s]" % (scores.mean(), scores.std(), label))
 #  ██╗███╗   ██╗██████╗ ██╗   ██╗████████╗    ██████╗ ██╗   ██╗████████╗██████╗ ██╗   ██╗████████╗
 #  ██║████╗  ██║██╔══██╗██║   ██║╚══██╔══╝   ██╔═══██╗██║   ██║╚══██╔══╝██╔══██╗██║   ██║╚══██╔══╝
 #  ██║██╔██╗ ██║██████╔╝██║   ██║   ██║█████╗██║   ██║██║   ██║   ██║   ██████╔╝██║   ██║   ██║   
