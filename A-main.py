@@ -85,7 +85,7 @@ def RunDummyClassifier(train, test):
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
 
-	dc = DummyClassifier(strategy='most_frequent', random_state=0)
+	dc = DummyClassifier(strategy='stratified', random_state=0)
 	dc.fit(X, y)			# Train
 	y_dc = dc.predict(X_)	# Predict / y_dc represents the estimated targets as returned by our classifier 
 
