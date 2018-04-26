@@ -21,6 +21,8 @@ from sklearn.linear_model import LogisticRegression
 
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import KFold
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.datasets import make_classification
@@ -30,8 +32,6 @@ from sklearn import metrics
 from sklearn.dummy import DummyClassifier
 from sklearn import tree
 
-
-from sklearn.model_selection import cross_val_score
 
 
 
@@ -73,13 +73,10 @@ def main():
 
 
 
-def RunDummyClassifier(train, test):
+def RunDummyClassifier(trainDf, testDf):
 	
-	# Create numpy arrays for use with scikit-learn
-	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
-	train_y = train.Cover_Type.values						# target feature (to predict)
-	test_X = test.drop(['Cover_Type'], axis=1).values
-
+	train_X, train_y, test_X = createArrays(trainDf, testDf)
+	
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
 
@@ -96,11 +93,9 @@ def RunDummyClassifier(train, test):
 	pd.DataFrame({'Cover_Type': y_test_dc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/dc1.csv', index=False)
 
 
-def RunDecisionTreeClassifier(train, test):
-	# Create numpy arrays for use with scikit-learn
-	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
-	train_y = train.Cover_Type.values						# target feature (to predict)
-	test_X = test.drop(['Cover_Type'], axis=1).values
+def RunDecisionTreeClassifier(trainDf, testDf):
+
+	train_X, train_y, test_X = createArrays(trainDf, testDf)
 
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
@@ -118,12 +113,9 @@ def RunDecisionTreeClassifier(train, test):
 	pd.DataFrame({'Cover_Type': y_test_dtc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/dtc1.csv', index=False)
 
 
-def RunRandomForestClassifier(train, test):
+def RunRandomForestClassifier(trainDf, testDf):
 	
-	# Create numpy arrays for use with scikit-learn
-	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
-	train_y = train.Cover_Type.values						# target feature (to predict)
-	test_X = test.drop(['Cover_Type'], axis=1).values
+	train_X, train_y, test_X = createArrays(trainDf, testDf)
 
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
@@ -142,12 +134,9 @@ def RunRandomForestClassifier(train, test):
 
 
 
-def RunExtraTreesClassifier(train, test):
+def RunExtraTreesClassifier(trainDf, testDf):
 
-	# Create numpy arrays for use with scikit-learn
-	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
-	train_y = train.Cover_Type.values						# target feature (to predict)
-	test_X = test.drop(['Cover_Type'], axis=1).values
+	train_X, train_y, test_X = createArrays(trainDf, testDf)
 
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
@@ -165,12 +154,9 @@ def RunExtraTreesClassifier(train, test):
 	pd.DataFrame({'Cover_Type': y_test_etc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/etc1.csv', index=False)
 
 
-def RunAdaBoostClassifier(train, test):
+def RunAdaBoostClassifier(trainDf, testDf):
 
-	# Create numpy arrays for use with scikit-learn
-	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
-	train_y = train.Cover_Type.values						# target feature (to predict)
-	test_X = test.drop(['Cover_Type'], axis=1).values
+	train_X, train_y, test_X = createArrays(trainDf, testDf)
 
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
@@ -188,12 +174,9 @@ def RunAdaBoostClassifier(train, test):
 	pd.DataFrame({'Cover_Type': y_test_abc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/abc1.csv', index=False)
 
 
-def RunBaggingClassifier(train, test):
+def RunBaggingClassifier(trainDf, testDf):
 
-	# Create numpy arrays for use with scikit-learn
-	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
-	train_y = train.Cover_Type.values						# target feature (to predict)
-	test_X = test.drop(['Cover_Type'], axis=1).values
+	train_X, train_y, test_X = createArrays(trainDf, testDf)
 
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
@@ -211,11 +194,9 @@ def RunBaggingClassifier(train, test):
 	pd.DataFrame({'Cover_Type': y_test_bc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/bc1.csv', index=False)
 
 
-def RunGradientBoostingClassifier(train, test):
-	# Create numpy arrays for use with scikit-learn
-	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
-	train_y = train.Cover_Type.values						# target feature (to predict)
-	test_X = test.drop(['Cover_Type'], axis=1).values
+def RunGradientBoostingClassifier(trainDf, testDf):
+	
+	train_X, train_y, test_X = createArrays(trainDf, testDf)
 
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
@@ -233,11 +214,9 @@ def RunGradientBoostingClassifier(train, test):
 	pd.DataFrame({'Cover_Type': y_test_bc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/bc1.csv', index=False)
 
 
-def RunVotingClassifier(train, test):
-	# Create numpy arrays for use with scikit-learn
-	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
-	train_y = train.Cover_Type.values						# target feature (to predict)
-	test_X = test.drop(['Cover_Type'], axis=1).values
+def RunVotingClassifier(trainDf, testDf):
+	
+	train_X, train_y, test_X = createArrays(trainDf, testDf)
 
 	clf1 = LogisticRegression(random_state=1)
 	clf2 = RandomForestClassifier(random_state=1)
@@ -249,11 +228,9 @@ def RunVotingClassifier(train, test):
 	print("Accuracy: %0.2f (+/- %0.2f) [%s]" % (scores.mean(), scores.std(), label))
 
 
-def RunKNeighborsClassifier(train, test):
-	# Create numpy arrays for use with scikit-learn
-	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
-	train_y = train.Cover_Type.values						# target feature (to predict)
-	test_X = test.drop(['Cover_Type'], axis=1).values
+def RunKNeighborsClassifier(trainDf, testDf):
+	
+	train_X, train_y, test_X = createArrays(trainDf, testDf)
 
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
@@ -311,6 +288,15 @@ def write_dataframe(df, fileName):
 #  ██║   ██║   ██║   ██║██║     ╚════██║
 #  ╚██████╔╝   ██║   ██║███████╗███████║
 #   ╚═════╝    ╚═╝   ╚═╝╚══════╝╚══════╝
+
+
+def createArrays(trainDf, testDf):
+	# Create numpy arrays for use with scikit-learn
+	train_X = trainDf.drop(['Cover_Type'], axis=1).values		# training set (sample)
+	train_y = trainDf.Cover_Type.values						# target feature (to predict)
+	test_X = testDf.drop(['Cover_Type'], axis=1).values
+
+	return train_X, train_y, test_X
 
 
 def evaluateModel(y_true, y_pred):
