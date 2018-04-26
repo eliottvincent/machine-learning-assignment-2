@@ -10,9 +10,14 @@ import numpy as np
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import AdaBoostClassifier
-from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import BaggingClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
+
+from sklearn.neural_network import MLPClassifier
 from sklearn.datasets import make_classification
 from sklearn import metrics
 from sklearn.dummy import DummyClassifier
@@ -34,7 +39,10 @@ def main():
 	# RunRandomForestClassifier(trainDf, testDf)
 	# RunDecisionTreeClassifier(trainDf, testDf)
 	# RunExtraTreesClassifier(trainDf, testDf)
-	RunAdaBoostClassifier(trainDf, testDf)
+	# RunAdaBoostClassifier(trainDf, testDf)
+	# RunBaggingClassifier(trainDf, testDf)
+	RunGradientBoostingClassifier(trainDf, testDf)
+
 
 
 	# RunMLPClassifier(trainDf, testDf)
@@ -79,7 +87,7 @@ def RunDummyClassifier(train, test):
 	y_test_dc = dc.predict(test_X)	# Predict with test set
 
 	# Write to CSV
-	pd.DataFrame({'Cover_Type': y_test_dc}).sort_index(ascending=False, axis=1).to_csv('dc1.csv', index=False)
+	pd.DataFrame({'Cover_Type': y_test_dc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/dc1.csv', index=False)
 
 
 def RunRandomForestClassifier(train, test):
@@ -108,7 +116,7 @@ def RunRandomForestClassifier(train, test):
 	y_test_rfc = rfc.predict(test_X)	# Predict with test set
 
 	# Write to CSV
-	pd.DataFrame({'Cover_Type': y_test_rfc}).sort_index(ascending=False, axis=1).to_csv('rf1.csv', index=False)
+	pd.DataFrame({'Cover_Type': y_test_rfc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/rf1.csv', index=False)
 
 
 def RunDecisionTreeClassifier(train, test):
@@ -134,7 +142,7 @@ def RunDecisionTreeClassifier(train, test):
 	y_test_dtc = dtc.predict(test_X)	# Predict with test set
 
 	# Write to CSV
-	pd.DataFrame({'Cover_Type': y_test_dtc}).sort_index(ascending=False, axis=1).to_csv('dtc1.csv', index=False)
+	pd.DataFrame({'Cover_Type': y_test_dtc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/dtc1.csv', index=False)
 
 
 def RunExtraTreesClassifier(train, test):
@@ -161,7 +169,7 @@ def RunExtraTreesClassifier(train, test):
 	y_test_etc = etc.predict(test_X)	# Predict with test set
 
 	# Write to CSV
-	pd.DataFrame({'Cover_Type': y_test_etc}).sort_index(ascending=False, axis=1).to_csv('etc1.csv', index=False)
+	pd.DataFrame({'Cover_Type': y_test_etc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/etc1.csv', index=False)
 
 
 def RunAdaBoostClassifier(train, test):
@@ -188,7 +196,7 @@ def RunAdaBoostClassifier(train, test):
 	y_test_abc = abc.predict(test_X)	# Predict with test set
 
 	# Write to CSV
-	pd.DataFrame({'Cover_Type': y_test_abc}).sort_index(ascending=False, axis=1).to_csv('abc1.csv', index=False)
+	pd.DataFrame({'Cover_Type': y_test_abc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/abc1.csv', index=False)
 
 
 
