@@ -89,11 +89,7 @@ def RunDummyClassifier(train, test):
 	dc.fit(X, y)			# Train
 	y_dc = dc.predict(X_)	# Predict / y_dc represents the estimated targets as returned by our classifier 
 
-	# Evaluating model with validation set
-	print(metrics.classification_report(y_, y_dc))
-	print(metrics.confusion_matrix(y_, y_dc))
-	print(metrics.accuracy_score(y_, y_dc))
-	print(metrics.r2_score(y_, y_dc))
+	evaluateModel(y_, y_dc)	# Evaluating model with validation set
 
 	dc.fit(train_X, train_y)		# Retrain with entire training set
 	y_test_dc = dc.predict(test_X)	# Predict with test set
@@ -118,11 +114,7 @@ def RunRandomForestClassifier(train, test):
 	rfc.fit(X, y)			# Train
 	y_rfc = rfc.predict(X_)	# Predict / y_rfc represents the estimated targets as returned by our classifier 
 
-	# Evaluating model with validation set
-	print(metrics.classification_report(y_, y_rfc))
-	print(metrics.confusion_matrix(y_, y_rfc))
-	print(metrics.accuracy_score(y_, y_rfc))
-	print(metrics.r2_score(y_, y_rfc))
+	evaluateModel(y_, y_rfc)	# Evaluating model with validation set
 
 	rfc.fit(train_X, train_y)			# Retrain with entire training set
 	y_test_rfc = rfc.predict(test_X)	# Predict with test set
@@ -144,11 +136,7 @@ def RunDecisionTreeClassifier(train, test):
 	dtc.fit(X, y)				# Train
 	y_dtc = dtc.predict(X_)		# Predict / y_dtc represents the estimated targets as returned by our classifier
 	
-	# Evaluating model with validation set
-	print(metrics.classification_report(y_, y_dtc))
-	print(metrics.confusion_matrix(y_, y_dtc))
-	print(metrics.accuracy_score(y_, y_dtc))
-	print(metrics.r2_score(y_, y_dtc))
+	evaluateModel(y_, y_dtc)	# Evaluating model with validation set
 
 	dtc.fit(train_X, train_y)			# Retrain with entire training set
 	y_test_dtc = dtc.predict(test_X)	# Predict with test set
@@ -171,11 +159,7 @@ def RunExtraTreesClassifier(train, test):
 	etc.fit(X, y)			# Train
 	y_etc = etc.predict(X_)	# Predict / y_etc represents the estimated targets as returned by our classifier
 	
-	# Evaluating model with validation set
-	print(metrics.classification_report(y_, y_etc))
-	print(metrics.confusion_matrix(y_, y_etc))
-	print(metrics.accuracy_score(y_, y_etc))
-	print(metrics.r2_score(y_, y_etc))
+	evaluateModel(y_, y_etc)	# Evaluating model with validation set
 
 	etc.fit(train_X, train_y)		# Retrain with entire training set
 	y_test_etc = etc.predict(test_X)	# Predict with test set
@@ -198,11 +182,7 @@ def RunAdaBoostClassifier(train, test):
 	abc.fit(X, y)			# Train
 	y_abc = abc.predict(X_)	# Predict / y_abc represents the estimated targets as returned by our classifier
 	
-	# Evaluating model with validation set
-	print(metrics.classification_report(y_, y_abc))
-	print(metrics.confusion_matrix(y_, y_abc))
-	print(metrics.accuracy_score(y_, y_abc))
-	print(metrics.r2_score(y_, y_abc))
+	evaluateModel(y_, y_abc)	# Evaluating model with validation set
 
 	abc.fit(train_X, train_y)			# Retrain with entire training set
 	y_test_abc = abc.predict(test_X)	# Predict with test set
@@ -225,11 +205,7 @@ def RunBaggingClassifier(train, test):
 	bc.fit(X, y)			# Train
 	y_bc = bc.predict(X_)	# Predict / y_bc represents the estimated targets as returned by our classifier
 	
-	# Evaluating model with validation set
-	print(metrics.classification_report(y_, y_bc))
-	print(metrics.confusion_matrix(y_, y_bc))
-	print(metrics.accuracy_score(y_, y_bc))
-	print(metrics.r2_score(y_, y_bc))
+	evaluateModel(y_, y_bc)	# Evaluating model with validation set
 
 	bc.fit(train_X, train_y)			# Retrain with entire training set
 	y_test_bc = bc.predict(test_X)	# Predict with test set
@@ -251,11 +227,7 @@ def RunGradientBoostingClassifier(train, test):
 	gbc.fit(X, y)			# Train
 	y_gbc = gbc.predict(X_)	# Predict / y_gbc represents the estimated targets as returned by our classifier
 	
-	# Evaluating model with validation set
-	print(metrics.classification_report(y_, y_gbc))
-	print(metrics.confusion_matrix(y_, y_gbc))
-	print(metrics.accuracy_score(y_, y_gbc))
-	print(metrics.r2_score(y_, y_gbc))
+	evaluateModel(y_, y_gbc)	# Evaluating model with validation set
 
 	gbc.fit(train_X, train_y)			# Retrain with entire training set
 	y_test_bc = gbc.predict(test_X)	# Predict with test set
@@ -292,11 +264,7 @@ def RunKNeighborsClassifier(train, test):
 	knc.fit(X, y)			# Train
 	y_knc = knc.predict(X_)	# Predict / y_knc represents the estimated targets as returned by our classifier
 	
-	# Evaluating model with validation set
-	print(metrics.classification_report(y_, y_knc))
-	print(metrics.confusion_matrix(y_, y_knc))
-	print(metrics.accuracy_score(y_, y_knc))
-	print(metrics.r2_score(y_, y_knc))
+	evaluateModel(y_, y_knc)	# Evaluating model with validation set
 
 	knc.fit(train_X, train_y)			# Retrain with entire training set
 	y_test_knc = knc.predict(test_X)	# Predict with test set
@@ -347,6 +315,21 @@ def write_dataframe(df, fileName):
 #   ╚═════╝    ╚═╝   ╚═╝╚══════╝╚══════╝
 
 
+def evaluateModel(y_true, y_pred):
+	print('')
+	print('Classification report:')
+	print(metrics.classification_report(y_true, y_pred))
+	print('')
+	print('Confusion matrix:')
+	print(metrics.confusion_matrix(y_true, y_pred))
+	print('')
+	print('Accuracy score: ' + str(metrics.accuracy_score(y_true, y_pred)))
+	print('')
+	# print('Precision score: ' + str(metrics.precision_score(y_true, y_pred, average=None)))
+	# print('Recall: ' + str(metrics.recall_score(y_true, y_pred, average=None)))
+	return None
+
+
 def dataframeToNumpy(df):
 	return df[df.columns.values].values
 
@@ -355,9 +338,9 @@ def splitDataFrame(fullDf, trainPercentage):
 	test_size = (100 - trainPercentage) / 100
 	trainDf, testDf = train_test_split(fullDf, test_size=test_size)
 
-	print('Original: ' + str(fullDf.size) + ' / ' + str(fullDf.shape))
-	print('Train: ' + str(trainDf.size) + ' / ' + str(trainDf.shape))
-	print('Test: ' + str(testDf.size) + ' / ' + str(testDf.shape))
+	# print('Original: ' + str(fullDf.size) + ' / ' + str(fullDf.shape))
+	# print('Train: ' + str(trainDf.size) + ' / ' + str(trainDf.shape))
+	# print('Test: ' + str(testDf.size) + ' / ' + str(testDf.shape))
 	return trainDf, testDf
 
 # program launch
