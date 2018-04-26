@@ -201,7 +201,7 @@ def RunBaggingClassifier(train, test):
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
 
-	bc = BaggingClassifier(KNeighborsClassifier(), n_estimators=10)
+	bc = BaggingClassifier(KNeighborsClassifier(), max_samples=0.8, max_features=0.8, n_estimators=10)
 	bc.fit(X, y)			# Train
 	y_bc = bc.predict(X_)	# Predict / y_bc represents the estimated targets as returned by our classifier
 	
