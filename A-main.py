@@ -20,18 +20,18 @@ from sklearn import metrics
 # properties
 #================================================================================
 dataPath = './data/'
-featuresNames = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrology', 'Vertical_Distance_To_Hydrology', 'Horizontal_Distance_To_Roadways', 'Hillshade_9am', 'Hillshade_Noon', 'Hillshade_3pm', 'Horizontal_Distance_To_Fire_Points', 'Wilderness_Area', 'Soil_Type', 'Cover_Type']
+
 
 def main():
 
-	fullDf = load_dataframe('DataSet-cleaned-integer.csv')
+	fullDf = load_dataframe('DataSet-cleaned-binary.csv')
 	trainDf, testDf = splitDataFrame(fullDf, 90)
 
 	# convertedDf = dataframeToNumpy(df)
 
-	RunRandomForestClassifier(fullDf, trainDf, testDf)
+	RunRandomForestClassifier(trainDf, testDf)
+	# RunMLPClassifier(trainDf, testDf)
 	# RunExtraTreesClassifier(trainDf, testDf)
-
 
 	return None
 
@@ -110,7 +110,7 @@ def load_dataframe(fileName):
 	pd.read_csv() -- the DataFrame loaded by Pandas
     """
 	path = dataPath + fileName
-	return pd.read_csv(path, header=None, names=featuresNames)
+	return pd.read_csv(path, header=0)
 
 
 def write_dataframe(df, fileName):
