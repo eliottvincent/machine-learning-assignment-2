@@ -29,11 +29,12 @@ def main():
 	fullDf = load_dataframe('DataSet-cleaned-binary.csv')
 	trainDf, testDf = splitDataFrame(fullDf, 90)
 
-	RunDummyClassifier(trainDf, testDf)
+	# RunDummyClassifier(trainDf, testDf)
 	# RunRandomForestClassifier(trainDf, testDf)
-	# RunExtraTreesClassifier(trainDf, testDf)
+	# RunDecisionTreeClassifier(trainDf, testDf)
+	RunExtraTreesClassifier(trainDf, testDf)
 
-	RunRandomForestClassifier(trainDf, testDf)
+
 	# RunMLPClassifier(trainDf, testDf)
 	
 	return None
@@ -108,7 +109,7 @@ def RunRandomForestClassifier(train, test):
 	pd.DataFrame({'Cover_Type': y_test_rfc}).sort_index(ascending=False, axis=1).to_csv('rf1.csv', index=False)
 
 
-def RunDecisionTree(train, test):
+def RunDecisionTreeClassifier(train, test):
 	# Create numpy arrays for use with scikit-learn
 	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
 	train_y = train.Cover_Type.values						# target feature (to predict)
@@ -117,21 +118,21 @@ def RunDecisionTree(train, test):
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
 
-	dt = tree.DecisionTreeClassifier()
-	dt.fit(X, y)			# Train
-	y_rf = dt.predict(X_)	# Predict / y_rf represents the estimated targets as returned by our classifier
+	dtc = tree.DecisionTreeClassifier()
+	dtc.fit(X, y)				# Train
+	y_dtc = dtc.predict(X_)		# Predict / y_dtc represents the estimated targets as returned by our classifier
 	
 	# Evaluating model with validation set
-	print(metrics.classification_report(y_, y_rf))
-	print(metrics.confusion_matrix(y_, y_rf))
-	print(metrics.accuracy_score(y_, y_rf))
-	print(metrics.r2_score(y_, y_rf))
+	print(metrics.classification_report(y_, y_dtc))
+	print(metrics.confusion_matrix(y_, y_dtc))
+	print(metrics.accuracy_score(y_, y_dtc))
+	print(metrics.r2_score(y_, y_dtc))
 
-	dt.fit(train_X, train_y)		# Retrain with entire training set
-	y_test_rf = dt.predict(test_X)	# Predict with test set
+	dtc.fit(train_X, train_y)			# Retrain with entire training set
+	y_test_dtc = dtc.predict(test_X)	# Predict with test set
 
 	# Write to CSV
-	pd.DataFrame({'Cover_Type': y_test_rf}).sort_index(ascending=False, axis=1).to_csv('dt1.csv', index=False)
+	pd.DataFrame({'Cover_Type': y_test_dtc}).sort_index(ascending=False, axis=1).to_csv('dtc1.csv', index=False)
 
 
 def RunExtraTreesClassifier():
