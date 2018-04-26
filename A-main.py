@@ -260,7 +260,7 @@ def RunKNeighborsClassifier(train, test):
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
 
-	knc = KNeighborsClassifier(n_neighbors=1)
+	knc = KNeighborsClassifier(n_neighbors=1, weights='distance')
 	knc.fit(X, y)			# Train
 	y_knc = knc.predict(X_)	# Predict / y_knc represents the estimated targets as returned by our classifier
 	
