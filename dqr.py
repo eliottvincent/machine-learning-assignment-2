@@ -16,9 +16,8 @@ from collections import Counter
 #================================================================================
 # properties
 #================================================================================
-featuresNames = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrology', 'Vertical_Distance_To_Hydrology', 'Horizontal_Distance_To_Roadways', 'Hillshade_9am', 'Hillshade_Noon', 'Hillshade_3pm', 'Horizontal_Distance_To_Fire_Points', 'Wilderness_Area', 'Soil_Type', 'Cover_Type']
-continuousFeatures = ['Elevation', 'Aspect', 'Slope', 'Horizontal_Distance_To_Hydrology', 'Vertical_Distance_To_Hydrology', 'Horizontal_Distance_To_Roadways', 'Hillshade_9am', 'Hillshade_Noon', 'Hillshade_3pm', 'Horizontal_Distance_To_Fire_Points']
-categoricalFeatures = ['Wilderness_Area', 'Soil_Type', 'Cover_Type']
+continuousFeatures = ['Elevation','Aspect','Slope','Horizontal_Distance_To_Hydrology','Vertical_Distance_To_Hydrology','Horizontal_Distance_To_Roadways','Hillshade_9am','Hillshade_Noon','Hillshade_3pm','Horizontal_Distance_To_Fire_Points']
+categoricalFeatures = ['Cover_Type', 'Wilderness_Area', 'Soil_Type']
 continuousStatistics = ['FEATURENAME', 'count', 'miss_percentage', 'card', 'minimum', 'first_quartile', 'mean', 'median', 'third_quartile', 'maximum', 'std_dev']
 categoricalStatistics = ['FEATURENAME', 'count', 'miss_percentage', 'card', 'mode', 'mode_frequency', 'mode_percentage', 'second_mode', 'second_mode_frequency', 'second_mode_percentage']
 dataPath = './data/'
@@ -26,8 +25,9 @@ teamName = 'A'
 
 
 def main():
+
 	# loading the dataset as a Pandas DataFrame
-	df = load_dataframe('DataSet-cleaned.csv')
+	df = load_dataframe('DataSet-cleaned-string.csv')
 
 	# splitting the main DataFrame in two sub-dataframes (continuous and categorical features)
 	continuousDf = getContinuousDf(df)
@@ -38,8 +38,8 @@ def main():
 	categoricalReport = generateCategoricalReport(categoricalDf)
 	
 	# saving the reports as .csv files
-	write_dataframe(continuousReport, teamName + '-DQR-ContinuousFeatures.csv')
-	write_dataframe(categoricalReport, teamName + '-DQR-CategoricalFeatures.csv')
+	write_dataframe(continuousReport, 'dqr/' + teamName + '-DQR-ContinuousFeatures.csv')
+	write_dataframe(categoricalReport, 'dqr/' + teamName + '-DQR-CategoricalFeatures.csv')
 
 	# generating the graphs for continuous and categorical features
 	generateContinuousGraphs(continuousDf, continuousReport)
@@ -67,7 +67,7 @@ def load_dataframe(fileName):
 	pd.read_csv() -- the DataFrame loaded by Pandas
     """
 	path = dataPath + fileName
-	return pd.read_csv(path, header=None, names=featuresNames)
+	return pd.read_csv(path, header=0)
 
 
 def write_dataframe(df, fileName):
@@ -278,7 +278,7 @@ def drawHistogramFromFeature(featureName, featureValues):
     """
 
 	data = [go.Histogram(x=featureValues)]
-	path = dataPath + featureName + '-histogram.html'
+	path = dataPath + 'dqr/' + featureName + '-histogram.html'
 	plotly.offline.plot(data, filename=path, auto_open=False)
 
 
@@ -301,7 +301,7 @@ def drawBarPlotFromFeature(featureName, featureValues):
 		y_axis.append(occurrences[occurrence])
 
 	data = [go.Bar(x=x_axis, y=y_axis)]
-	path = dataPath + featureName + '-bar-plot.html'
+	path = dataPath + 'dqr/' + featureName + '-bar-plot.html'
 	plotly.offline.plot(data, filename=path, auto_open=False)
 
 
