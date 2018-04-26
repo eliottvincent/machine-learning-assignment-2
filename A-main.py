@@ -9,12 +9,11 @@ import pandas as pd
 import numpy as np
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.datasets import make_classification
 from sklearn import metrics
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import classification_report
 
 
 #================================================================================
@@ -47,36 +46,33 @@ def main():
 #   ╚═════╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝
 
 
-def RunRandomForestClassifier(fullDf, trainDf, testDf):
+def RunRandomForestClassifier(train, test):
 	
-	# Load the training and test data sets
-	train = load_dataframe('DataSet-cleaned-integer.csv')
-	test = load_dataframe('DataSet-1000-cleaned.csv')
-
 	# Create numpy arrays for use with scikit-learn
 	# train_X = train.drop(['Id','Cover_Type'],axis=1).values
-	train_X = train.drop(['Cover_Type'], axis=1).values	# sample
+	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
 	train_y = train.Cover_Type.values						# target feature (to predict)
 	# test_X = test.drop('Id',axis=1).values
-	test_X = test.values
+	test_X = test.drop(['Cover_Type'], axis=1).values
 
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
 
-	# Train and predict with the random forest classifier
-	rf = RandomForestClassifier()
-	rf.fit(X, y)
-	y_rf = rf.predict(X_)
-	print(metrics.classification_report(y_, y_rf))
-	print(metrics.accuracy_score(y_, y_rf))
+	rf = RandomForestClassifier(n_estimators=100, max_depth=None, verbose=True)
+	rf.fit(X, y)			# Train
+	y_rf = rf.predict(X_)	# Predict / y_rf represents the estimated targets as returned by our classifier 
 
-	# Retrain with entire training set and predict test set.
-	rf.fit(train_X, train_y)
-	y_test_rf = rf.predict(test_X)
+	# Evaluating model with validation set
+	print(metrics.classification_report(y_, y_rf))
+	print(metrics.confusion_matrix(y_, y_rf))
+	print(metrics.accuracy_score(y_, y_rf))
+	print(metrics.r2_score(y_, y_rf))
+
+	rf.fit(train_X, train_y)		# Retrain with entire training set
+	y_test_rf = rf.predict(test_X)	# Predict with test set
 
 	# Write to CSV
-	fullDf.DataFrame({'Cover_Type': y_test_rf}).sort_index(ascending=False, axis=1).to_csv('rf1.csv', index=False)
-	return None
+	pd.DataFrame({'Cover_Type': y_test_rf}).sort_index(ascending=False, axis=1).to_csv('rf1.csv', index=False)
 
 
 def RunExtraTreesClassifier():
