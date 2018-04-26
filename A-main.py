@@ -277,6 +277,32 @@ def RunVotingClassifier(train, test):
 
 	for clf, label in zip([clf1, clf2, clf3, eclf], ['Logistic Regression', 'Random Forest', 'naive Bayes', 'Ensemble']):scores = cross_val_score(clf, train_X, train_y, cv=5, scoring='accuracy')
 	print("Accuracy: %0.2f (+/- %0.2f) [%s]" % (scores.mean(), scores.std(), label))
+
+
+def RunKNeighborsClassifier(train, test):
+	# Create numpy arrays for use with scikit-learn
+	train_X = train.drop(['Cover_Type'], axis=1).values		# training set (sample)
+	train_y = train.Cover_Type.values						# target feature (to predict)
+	test_X = test.drop(['Cover_Type'], axis=1).values
+
+	# Split the training set into training and validation sets
+	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
+
+	knc = KNeighborsClassifier(n_neighbors=1)
+	knc.fit(X, y)			# Train
+	y_knc = knc.predict(X_)	# Predict / y_knc represents the estimated targets as returned by our classifier
+	
+	# Evaluating model with validation set
+	print(metrics.classification_report(y_, y_knc))
+	print(metrics.confusion_matrix(y_, y_knc))
+	print(metrics.accuracy_score(y_, y_knc))
+	print(metrics.r2_score(y_, y_knc))
+
+	knc.fit(train_X, train_y)			# Retrain with entire training set
+	y_test_knc = knc.predict(test_X)	# Predict with test set
+
+	# Write to CSV
+	pd.DataFrame({'Cover_Type': y_test_knc}).sort_index(ascending=False, axis=1).to_csv('./data/predictions/knc1.csv', index=False)
 #  ██╗███╗   ██╗██████╗ ██╗   ██╗████████╗    ██████╗ ██╗   ██╗████████╗██████╗ ██╗   ██╗████████╗
 #  ██║████╗  ██║██╔══██╗██║   ██║╚══██╔══╝   ██╔═══██╗██║   ██║╚══██╔══╝██╔══██╗██║   ██║╚══██╔══╝
 #  ██║██╔██╗ ██║██████╔╝██║   ██║   ██║█████╗██║   ██║██║   ██║   ██║   ██████╔╝██║   ██║   ██║   
