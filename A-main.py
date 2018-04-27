@@ -25,9 +25,9 @@ from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import KFold
 
 from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
 from sklearn.datasets import make_classification
 from sklearn import datasets
-
 from sklearn import metrics
 from sklearn.dummy import DummyClassifier
 from sklearn import tree
@@ -300,7 +300,16 @@ def RunMLPClassifier(trainDf, testDf):
     trainDf -- the training DataFrame (pandas)
     testDf -- the testing DataFrame (pandas)
     """
+
 	train_X, train_y, test_X = createArrays(trainDf, testDf)
+
+	scaler = StandardScaler()	# Init the scaler
+	scaler.fit(train_X)			# Fit only to the training data
+
+	StandardScaler(copy=True, with_mean=True, with_std=True)
+
+	train_X = scaler.transform(train_X)	# Now apply the transformations to the data
+	test_X = scaler.transform(test_X)
 
 	# Split the training set into training and validation sets
 	X, X_, y, y_ = train_test_split(train_X, train_y, test_size=0.2)
@@ -308,7 +317,7 @@ def RunMLPClassifier(trainDf, testDf):
 	mlpc = MLPClassifier(verbose=True)
 	mlpc.fit(X, y)			# Train
 	
-	MLPClassifier(hidden_layer_sizes=(56, 56, 56))
+	MLPClassifier(solver='sgd', learning_rate='adaptative', learning_rate_init=0.0000001, tol=0.0000001, hidden_layer_sizes=(56, 56, 56), random_state=0)
 	y_mlpc = mlpc.predict(X_)	# Predict / y_rf represents the estimated targets as returned by our classifier 
 
 	evaluateModel(y_, y_mlpc)	# Evaluating model with validation set
