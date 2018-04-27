@@ -55,7 +55,7 @@ def main():
 	# RunBaggingClassifier(trainDf, testDf)
 	# RunGradientBoostingClassifier(trainDf, testDf)
 	# RunVotingClassifier(trainDf, testDf)
-	# RunKNeighborsClassifier(trainDf, testDf)
+	RunKNeighborsClassifier(trainDf, testDf)
 
 	# RunMLPClassifier(trainDf, testDf)
 	
