@@ -47,7 +47,7 @@ def main():
 	fullDf = load_dataframe('DataSet-cleaned-binary.csv')
 	trainDf, testDf = splitDataFrame(fullDf, 90)
 
-	# RunDummyClassifier(trainDf, testDf)
+	RunDummyClassifier(trainDf, testDf)
 	# RunDecisionTreeClassifier(trainDf, testDf)
 	# RunRandomForestClassifier(trainDf, testDf)
 	# RunExtraTreesClassifier(trainDf, testDf)
@@ -55,7 +55,7 @@ def main():
 	# RunBaggingClassifier(trainDf, testDf)
 	# RunGradientBoostingClassifier(trainDf, testDf)
 	# RunVotingClassifier(trainDf, testDf)
-	RunKNeighborsClassifier(trainDf, testDf)
+	# RunKNeighborsClassifier(trainDf, testDf)
 
 	# RunMLPClassifier(trainDf, testDf)
 	
@@ -307,13 +307,8 @@ def RunMLPClassifier(trainDf, testDf):
 
 	mlpc = MLPClassifier(verbose=True)
 	mlpc.fit(X, y)			# Train
-	MLPClassifier(activation='relu', alpha=1e-05, batch_size='auto',
-       beta_1=0.9, beta_2=0.999, early_stopping=True,
-       epsilon=1e-08, hidden_layer_sizes=(5, 2), learning_rate='adaptive',
-       learning_rate_init=0.001, max_iter=400, momentum=0.9,
-       nesterovs_momentum=True, power_t=0.5, random_state=1, shuffle=True,
-       solver='adam', tol=1e-7, validation_fraction=0.1, verbose=True,
-       warm_start=False)
+	
+	MLPClassifier(hidden_layer_sizes=(56, 56, 56))
 	y_mlpc = mlpc.predict(X_)	# Predict / y_rf represents the estimated targets as returned by our classifier 
 
 	evaluateModel(y_, y_mlpc)	# Evaluating model with validation set
