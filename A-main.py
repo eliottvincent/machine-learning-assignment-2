@@ -47,8 +47,9 @@ def main():
 	fullDf = load_dataframe('DataSet-cleaned-binary.csv')
 	trainDf, testDf = splitDataFrame(fullDf, 90)
 
-	# RunDummyClassifier(trainDf, testDf)
-	RunDecisionTreeClassifier(trainDf, testDf)
+
+	RunDummyClassifier(trainDf, testDf)
+	# RunDecisionTreeClassifier(trainDf, testDf)
 	# RunRandomForestClassifier(trainDf, testDf)
 	# RunExtraTreesClassifier(trainDf, testDf)
 	# RunAdaBoostClassifier(trainDf, testDf)
@@ -297,6 +298,19 @@ def createArrays(trainDf, testDf):
 	test_X = testDf.drop(['Cover_Type'], axis=1).values
 
 	return train_X, train_y, test_X
+
+
+def getFolds(n_splits, trainDf):
+	kf = KFold(n_splits=n_splits, random_state=None)
+
+	for train_index, test_index in kf.split(X=trainDf):
+
+		print("TRAIN:", train_index, "TEST:", test_index)
+		
+		X = trainDf.values
+		y = trainDf.Cover_Type.values
+		X_train, X_test = X[train_index], X[test_index]
+		y_train, y_test = y[train_index], y[test_index]
 
 
 def evaluateModel(y_true, y_pred):
