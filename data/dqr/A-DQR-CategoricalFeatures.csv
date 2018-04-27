@@ -1,0 +1,4 @@
+FEATURENAME,count,miss_percentage,card,mode,mode_frequency,mode_percentage,second_mode,second_mode_frequency,second_mode_percentage
+Wilderness_Area,581012,0.0,4,Rawah_Wilderness_Area,260796,44.88650836815763,Comanche_Peak_Wilderness_Area,253364,43.60736094951567
+Soil_Type,581012,0.0,40,Como_Legault_families_complex,115247,19.83556277667243,Leighcan_family_till_substratum_Typic_Cryaquolls_complex,57752,9.939897971126243
+Cover_Type,581012,0.0,7,Lodgepole_Pine,283301,48.75992234239568,Spruce_Fir,211840,36.46052060886866
